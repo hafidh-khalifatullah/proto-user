@@ -1,0 +1,1 @@
+export const PG_CONNECTION: symbol = Symbol('PG_CONNECTION')
