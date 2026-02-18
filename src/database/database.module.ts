@@ -12,6 +12,7 @@ const pgProvider = {
             port: config.get<number>('PG_PORT'),
             user: config.get<string>('PG_USER'),
             password: config.get<string>('PG_PASSWORD'),
+            database: config.get<string>('PG_DB'),
             idleTimeoutMillis: 30000,
             connectionTimeoutMillis: 2000,
             maxLifetimeSeconds: 60,
