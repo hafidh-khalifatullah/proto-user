@@ -1,98 +1,301 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 NestJS Authentication API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-Backend-red)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![JWT](https://img.shields.io/badge/Auth-JWT-green)
+![Node.js](https://img.shields.io/badge/Driver-pg-yellow)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A simple **Authentication REST API** built with **NestJS** and **PostgreSQL** implementing a secure **JWT authentication system** using **Access Token** and **Refresh Token**.
 
-## Description
+This project intentionally avoids using **ORMs or Passport** in order to understand the **core mechanics of authentication, database interaction, and token handling**.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Instead, the project uses:
 
-## Project setup
+* Native **PostgreSQL driver (`pg`)**
+* Direct **JWT service**
+* Manual **Auth Guard implementation**
 
-```bash
-$ npm install
+This approach helps build a stronger understanding of **backend fundamentals**.
+
+---
+
+# ✨ Features
+
+✅ User Registration
+✅ Secure Login System
+✅ JWT Access Token Authentication
+✅ Refresh Token Mechanism
+✅ Logout / Token Revocation
+✅ Password Hashing with bcrypt
+✅ Refresh Token Hashing (SHA256)
+✅ Protected Routes using Custom Auth Guard
+✅ Direct PostgreSQL queries using `pg`
+
+---
+
+# 🧰 Tech Stack
+
+### Backend Framework
+
+* **NestJS**
+
+### Database
+
+* **PostgreSQL**
+
+### Database Driver
+
+* **pg (node-postgres)**
+  Used instead of ORM to directly interact with the database.
+
+### Authentication
+
+* **JWT (JSON Web Token)** using `@nestjs/jwt`
+
+### Security
+
+* **bcrypt** → password hashing
+* **SHA256** → refresh token hashing before storing in database
+
+---
+
+# 🏗 Architecture Overview
+
+The project follows the **modular architecture** encouraged by NestJS.
+
+
+src
+│
+├── auth
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── auth.guard.ts
+│   └── dto
+│
+├── user
+│   ├── user.service.ts
+│   └── user.repository.ts
+│
+├── database
+│   └── postgres.provider.ts
+│
+└── main.ts
+
+
+Key design decisions:
+
+* **No ORM used**
+* Database queries are written manually using `pg`
+* Authentication guard is implemented manually without Passport
+* Clear separation between **controller**, **service**, and **data access**
+
+---
+
+# 🔐 Authentication Flow
+
+
+flowchart TD
+
+A[User Register] --> B[Hash Password with bcrypt]
+B --> C[Store User in PostgreSQL]
+
+D[User Login] --> E[Validate Password]
+E --> F[Generate Access Token]
+E --> G[Generate Refresh Token]
+
+G --> H[Hash Refresh Token SHA256]
+H --> I[Store Token in Database]
+
+F --> J[Access Protected API]
+
+K[Access Token Expired] --> L[Send Refresh Token]
+L --> M[Validate Refresh Token]
+M --> N[Generate New Access Token]
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+# 🔒 Security Implementation
 
-# watch mode
-$ npm run start:dev
+## Password Hashing
 
-# production mode
-$ npm run start:prod
+Passwords are hashed using **bcrypt** before being stored.
+
+```
+password → bcrypt → stored in database
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## Refresh Token Hashing
 
-# e2e tests
-$ npm run test:e2e
+Refresh tokens are hashed before storing them.
 
-# test coverage
-$ npm run test:cov
+```
+refresh_token → sha256 → stored in database
 ```
 
-## Deployment
+This prevents attackers from directly using the refresh token if the database is compromised.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Route Protection
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+Protected routes use a **custom Auth Guard** that:
+
+1. Extracts the JWT from the request header
+2. Verifies the token using `JwtService`
+3. Attaches the user payload to the request object
+
+Example header:
+
+```
+Authorization: Bearer access_token
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+# 📡 API Endpoints
 
-Check out a few resources that may come in handy when working with NestJS:
+## Register
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+POST /auth/register
+```
 
-## Support
+Example request:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```json
+{
+  "name": "John Doe",
+  "email": "john@mail.com",
+  "password": "password123"
+}
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Login
 
-## License
+```
+POST /auth/login
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Response:
+
+```json
+{
+  "access_token": "xxxx",
+  "refresh_token": "xxxx"
+}
+```
+
+---
+
+## Refresh Token
+
+```
+POST /auth/refresh
+```
+
+Used to generate a new access token using the refresh token.
+
+---
+
+## Logout
+
+```
+POST /auth/logout
+```
+
+Removes refresh token from the database.
+
+---
+
+# ⚙️ Installation
+
+Clone repository
+
+```
+git clone https://github.com/yourusername/nest-auth-api.git
+```
+
+Move into project directory
+
+```
+cd nest-auth-api
+```
+
+Install dependencies
+
+```
+npm install
+```
+
+---
+
+# 🔧 Environment Variables
+
+Create `.env` file:
+
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/database
+
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+
+ACCESS_TOKEN_EXPIRES=15m
+REFRESH_TOKEN_EXPIRES=7d
+```
+
+---
+
+# ▶ Running the Application
+
+Development mode:
+
+```
+npm run start:dev
+```
+
+Server will run on:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🎯 Learning Objectives
+
+This project was built to better understand:
+
+* NestJS modular architecture
+* JWT authentication flow
+* Access Token & Refresh Token strategy
+* Password hashing best practices
+* Token hashing security
+* Direct PostgreSQL usage with `pg`
+* Implementing authentication **without relying on ORM or Passport**
+
+---
+
+# 🚧 Future Improvements
+
+Planned improvements:
+
+* Refresh Token Rotation
+* Role-Based Access Control (RBAC)
+* Rate Limiting
+* Swagger API Documentation
+* Unit Testing
+* Docker Support
+* Database migration system
+
+---
+
+# 👨‍💻 Author
+
+**Hafidh**
+
+Backend Developer (Learning Journey)
