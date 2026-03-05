@@ -22,15 +22,15 @@ This helps build stronger **backend fundamentals** and deeper understanding of a
 
 # ✨ Features
 
-✅ User Registration
-✅ Secure Login System
-✅ JWT Access Token Authentication
-✅ Refresh Token Mechanism
-✅ Logout / Token Revocation
-✅ Password Hashing with bcrypt
-✅ Refresh Token Hashing (SHA256)
-✅ Protected Routes using Custom Auth Guard
-✅ Direct PostgreSQL queries using `pg`
+✅ User Registration <br>
+✅ Secure Login System <br>
+✅ JWT Access Token Authentication <br>
+✅ Refresh Token Mechanism <br>
+✅ Logout / Token Revocation <br>
+✅ Password Hashing with bcrypt <br>
+✅ Refresh Token Hashing (SHA256) <br>
+✅ Protected Routes using Custom Auth Guard <br>
+✅ Direct PostgreSQL queries using `pg` <br>
 
 ---
 
