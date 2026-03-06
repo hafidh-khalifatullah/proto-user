@@ -349,13 +349,13 @@ Authorization: Bearer access_token
 Clone repository
 
 ```
-git clone https://github.com/yourusername/nest-auth-api.git
+git clone https://github.com/hafidh-khalifatullah/NestJs_Authentication_API
 ```
 
 Move into project folder
 
 ```
-cd nest-auth-api
+cd NestJs_Authentication_API
 ```
 
 Install dependencies
@@ -371,7 +371,11 @@ npm install
 Create `.env` file:
 
 ```
-DATABASE_URL=postgresql://user:password@localhost:5432/database
+PG_HOST= your_host
+PG_PORT= your_port
+PG_USER= your_user
+PG_PASSWORD= your_password
+PG_DB= your_db
 
 JWT_ACCESS_SECRET=your_access_secret
 JWT_REFRESH_SECRET=your_refresh_secret
@@ -379,8 +383,6 @@ JWT_REFRESH_SECRET=your_refresh_secret
 ACCESS_TOKEN_EXPIRES=15m
 REFRESH_TOKEN_EXPIRES=7d
 ```
-
-You may also provide an `.env.example` file in the repository.
 
 ---
 
