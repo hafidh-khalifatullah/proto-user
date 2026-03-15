@@ -1,7 +1,7 @@
 import { Inject } from "@nestjs/common";
 import { Pool } from "pg"
 import { PG_CONNECTION } from "src/database/database.constants";
-import { RefreshToken } from "../interface/refresh-token";
+import { RefreshToken } from "../domain/entities/refresh-token";
 
 export class RefreshTokenRepository {
     constructor(

@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { UsersRepository } from './repository/users.repository';
-import { User } from './interface/user';
-import { mapPgError } from './utils/users.pg-error-map';
+import { UsersRepository } from '../infrasturcture/repositories/users.repository';
+import { User } from '../domain/entities/user';
 @Injectable()
 export class UsersService {
     constructor(

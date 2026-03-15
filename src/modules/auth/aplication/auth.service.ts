@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { BCRYPT, SHA256 } from '../auth.constants';
-import { UsersRepository } from 'src/modules/users/infrastruktur/repositories/users.repository';
+import { UsersRepository } from 'src/modules/users/infrasturcture/repositories/users.repository';
 import { User } from 'src/modules/users/domain/entities/user';
 import { BcryptService } from './bcrypt.service';
 import { Sha256Service } from './sha256.service';
